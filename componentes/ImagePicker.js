@@ -85,9 +85,8 @@ export default class Picker extends React.Component {
 
                     <View>
                         { this.state.avatarSource === null ? <Text onPress={this.selectPhotoTapped.bind(this)}>Select a Photo</Text> :
-                            <TouchableOpacity onPress={this.onChangeImage.bind(this)}>
-                                <Image style={{width: 350, height:350}} source={this.state.avatarSource} />
-                            </TouchableOpacity>
+                                <Image onLoad={this.onChangeImage.bind(this)}
+                                    style={{width: 350, height:350}} source={this.state.avatarSource} />
 
                         }
                     </View>
