@@ -43,6 +43,25 @@ var api = {
             );
         })
         .done();
+    },
+    postMenu(data){
+        var url = "https://yomi.herokuapp.com/menus/";
+        return fetch(url,{
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic ' + Base64.btoa('admin_yomi:admin_yomi123456'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((res)=> res.json())
+        .then((resData) => {
+            console.log(
+                "POST response",
+                "Responde body ->"+JSON.stringify(resData)
+            );
+        })
+        .done();
     }
 
 
