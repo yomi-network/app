@@ -15,6 +15,7 @@ import {
 import api from '../utilities/api';
 import {StackNavigator} from 'react-navigation';
 import DB from './DB';
+import Picker from './ImagePicker';
 
 var DBEvents = require('react-native-db-models').DBEvents
 
@@ -72,32 +73,25 @@ class Recipes extends Component {
 
 
 function recipes (props, recipeList) {
-    /*static navigationOptions = {
-        title: 'Home',
-        headerTintColor: 'pink',
-    }*/
-    //render() {
-        //let r = getRecipesFromApi();
-        //console.log(r);
-        let recipes = recipeList;
-        console.log("recipes",recipes);
-        console.log(props);
-        return (
-            <View style={{flex: 0}}>
-                    <ScrollView title="Recetas">
-                        {RecipeList(recipes, props)}
-                        <Text onPress={get_recipes()}>
-                            Presioname
-                        </Text>
-                        <Button style={{position: 'absolute', marginTop: 50}}
-                            onPress={ () => props.navigation.navigate('NewRecipe',{id: 'rec5'})}
-                            title="Crear una receta" />
-                    </ScrollView>
+    let recipes = recipeList;
+    console.log("recipes",recipes);
+    console.log(props);
+    return (
+        <View style={{flex: 14}}>
+            <View>
+                <ScrollView title="Recetas">
+                    {RecipeList(recipes, props)}
+                </ScrollView>
             </View>
 
-
-        );
-    //}
+            <View style={{flex: 1}}>
+                <Button
+                    style={{position: 'absolute', marginTop: 50}}
+                    onPress={ () => props.navigation.navigate('NewRecipe',{id: 'rec5'})}
+                    title="Crear una receta" />
+            </View>
+        </View>
+    );
 }
 
 function RecipeList(recipes, props){
@@ -131,23 +125,25 @@ class NewRecipe extends Component{
     constructor(props){
         super(props);
         this.state = {
-            title: 'Enchiladas suizas picositas',
-            description: 'Tortillas de maiz rellenas de pollo y cubiertas de una salsa verde cremosita',
-            ingredients: ["1 kg de tortillas","1 kilo de tomate verde lavados", "5 piezas de chile serrano (para la salsa)","1/4 de pieza de cebolla (para la salsa)","1 ramita de cilantro fresco lavado, desinfectado y seco (para la salsa)","1 taza de crema ácida (para la salsa)","1/4 de taza de caldo de pollo (para la salsa)","3 cucharadas de aceite una cucharada para la salsa y dos cucharadas para las enchiladas","1 pizca de sal","1 pizca de pimienta","8 piezas de tortillas de maíz para las enchiladas","2 piezas de pechuga de pollo cocidas y deshebradas, para las enchiladas","1 taza de queso manchego rallado, para decorar"
-            ],
-            steps: ["Precalienta el horno a 200°C","Para la salsa, hierve los tomates y los chiles hasta que los tomates estén cocidos","Licúa los tomates y los chiles con la cebolla, el ajo, el cilantro, la crema y el caldo de pollo.","En una olla mediana, calienta una cucharada de aceite y fríe la salsa 5 minutos a fuego bajo. Sazona y reserva.","En una sartén, caliente el resto del aceite y pasa las tortillas por ambos lados un minuto para suavizar. Escurre.","Rellena las tortillas con el pollo. Acomoda en un refractario y baña con la salsa y el queso.","Gratina en el horno 5 minutos. Sirve."],
+            title: '',
+            description: '',
+            ingredients: [],
+            steps: [],
             images: [],
-            portions: 4,
-            cost: 72.12,
+            portions: 0,
+            cost: 0.0,
         }
     }
     static navigationOptions = {
         title: 'Nueva receta',
     }
-
-
-
-
+    onChangeImage(data){
+        console.log(data)
+        this.setState({
+            images: this.state.images.concat(data)
+        })
+        console.log("Images", this.state.images);
+    }
     render(){
         console.log(this.props);
         return(
@@ -162,6 +158,7 @@ class NewRecipe extends Component{
                     placeholder="Descripción"
                     onChangeText={(text) => this.setState(
                         {description: text})}/>
+                    <Picker changeImage={this.onChangeImage.bind(this)}/>
             </View>
             <View>
                 <Text>Porciones</Text>
@@ -208,7 +205,7 @@ class NewRecipe extends Component{
             <View>
                 <Button onPress={()=>{
                     console.log("this state:", this.state);
-                    api.postRecipe(this.state)}} title="Guardar"/>
+                    }} title="Guardar"/>
             </View>
         </ScrollView>
         );
@@ -239,9 +236,9 @@ const singleRecipe = (props) =>{
     return(
         <ScrollView>
             <View>
-                <Image source={{uri:recipe.images[0]}}
+                <Image source={{uri: recipe.images[0]}}
                     style={{width: 400, height: 350, marginTop:10}}/>
-                <Text style={estilosRecipe.titulo}>{recipe.name}</Text>
+                <Text style={estilosRecipe.titulo}>{recipe.title}</Text>
 
                 <Text style={estilosRecipe.titulo}>{recipe.description}</Text>
             </View>
@@ -270,16 +267,6 @@ class SingleRecipe extends Component {
     }
 }
 
-function getRecipesFromApi(){
-    return fetch("https://yomi.herokuapp.com/recipes/?format=json")
-    .then((response) => response.json())
-    .then((responseJson) => {
-        return responseJson.recipes;
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-}
 /*singleRecipe.navigationOptions =  (props) => {
     console.log("imprime algo");
     const {navigation} = props;
