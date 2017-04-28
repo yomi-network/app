@@ -17,6 +17,7 @@ import DB from './DB'
 var DBEvents = require('react-native-db-models').DBEvents
 import api from '../utilities/api';
 import Picker from './ImagePicker';
+import Banner from './Banner';
 
 const onButtonPress = () => {
     Alert.alert("El boton ha sido presionado");
@@ -52,8 +53,10 @@ class Menus extends Component{
 
     render(){
         console.log("Menus: ", this.state.menuList.results);
-        if ( this.state.menuList.results === undefined || this.state.menuList.results === null || this.state.menuList.results.length == 0) {
+        if ( this.state.menuList.results === undefined || this.state.menuList.results === null){
             return this.renderLoadingView(this.props);
+        }else if(this.state.menuList.results.length == 0){
+            return renderEmptyView(this.props)
         }else {
             return menus(this.props,this.state.menuList.results)
         }
@@ -63,7 +66,18 @@ class Menus extends Component{
         console.log("renderLoadingView ",props);
         p = props;
         return (
-            <View>
+            <View style={estilosMenu.container}>
+                <Text>Cargando ... </Text>
+                <Image style={{width: 48, height: 48}}
+                    source={require("../imagenes/egg48x48.png")} />
+            </View>
+        );
+    }
+    renderEmptyView(props) {
+        console.log("renderLoadingView ",props);
+        p = props;
+        return (
+            <View style={estilosMenu.container}>
                 <Text> Todavia no tienes ningún menú </Text>
                 <Button title="Crea uno" onPress={
                         (p) => {
@@ -80,7 +94,11 @@ function menus (props, menuList) {
     console.log(menus);
     console.log(props);
     return (
+
         <View style={{flex: 1}}>
+            <View>
+                <Banner />
+            </View>
             <View style={{flex: 14}} title="Menus">
                 <ScrollView>
                     {MenuList(menus, props)}
@@ -91,6 +109,7 @@ function menus (props, menuList) {
                     onPress={ () => {
                         console.log(props); props.navigation.navigate('NewMenu')}}
                     title="Crear un Menu" />
+                
             </View>
         </View>
 
@@ -310,7 +329,10 @@ var estilosMenu = StyleSheet.create({
         width: 400
     },
     container: {
-        borderTopColor: 'red'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#fafafa",
     },
 });
 
