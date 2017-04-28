@@ -15,33 +15,19 @@ import Start from './componentes/Start';
 import User from './componentes/User';
 import * as Menus from './componentes/Menus';
 import ImagePicker from './componentes/ImagePicker';
-const ModalStack = StackNavigator({
+import TimeLine from './componentes/TimeLine';
 
-    Opciones: {
-        name: "Menu de opciones",
-        description: "Listado de opciones",
-        screen: Start,
-        navigationOptions: {
-            title: "Menú principal",
-        },
-    },
+
+const ModalStack = {
     ListRecipe: {
-        name: "Lista de recetas",
+        name: "Mis recetas",
         description: "Listado de foo baz",
         screen: RecipesApi.default.Recipes,
         },
     ListMenu: {
-        name: "Lista de menus",
+        name: "Mis menus",
         description: "Listado de foo baz",
         screen: Menus.default.Menus,
-        navigationOptions: {
-            headerMode: 'none',
-        },
-    },
-    Menu: {
-        name: "menu",
-        description: "opciones del la app",
-        screen: Start,
     },
     Perfil: {
         name: "Perfil",
@@ -53,18 +39,10 @@ const ModalStack = StackNavigator({
         description: "Muestra el detalle de la receta",
         path: 'ShowRecipe/:name',
         screen: RecipesApi.default.SingleRecipe,
-        navigationOptions: {
-            title: "Receta",
-            headerMode: 'none',
-            headerStyle: {
-                backgroundColor: 'red',
-            }
-        },
     },
     NewRecipe:{
         name: "Crea un nueva receta",
         description: "Vista para crear una nueva receta",
-        path: 'NewRecipe',
         screen: RecipesApi.default.NewRecipe,
     },
     NewMenu:{
@@ -79,20 +57,44 @@ const ModalStack = StackNavigator({
         path: 'Showmenu/:name',
         screen: Menus.default.Singlemenu,
     },
+};
+
+
+const YomiNavigation = StackNavigator({
+    ListRecipe: {
+        screen: RecipesApi.default.Recipes,
+        },
+    ListMenu: {
+        screen: Menus.default.Menus,
+    },
+    Perfil: {
+        screen: User,
+    },
+    ShowRecipe: {
+        path: 'ShowRecipe/:name',
+        screen: RecipesApi.default.SingleRecipe,
+    },
+    NewRecipe:{
+        screen: RecipesApi.default.NewRecipe,
+    },
+    NewMenu:{
+        screen: Menus.default.Newmenu,
+    },
+    ShowMenu: {
+        screen: Menus.default.Singlemenu,
+    },
+    Index: {
+        screen: TimeLine,
+    },
+},
+{
+    initialRouteName: 'Index',
+    headerMode: 'none',
+    mode: 'card',
 });
 
-function opciones(titulo){
-    return("{title:"+titulo+"},");
-}
-export default class yomi extends Component {
-  render() {
-      console.log(Terms.default)
-      console.log(Header);
-    return(
-        <Start />
-    );
-  }
-}
+export default yomi = ({navigation}) =>  <YomiNavigation navigation={navigation}/>
+
 
 const estilos = StyleSheet.create({
   container: {

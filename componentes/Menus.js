@@ -89,7 +89,7 @@ class Menus extends Component{
 }
 
 
-function menus (props, menuList) {
+/*function menus (props, menuList) {
     let menus = menuList;
     console.log(menus);
     console.log(props);
@@ -109,21 +109,20 @@ function menus (props, menuList) {
                     onPress={ () => {
                         console.log(props); props.navigation.navigate('NewMenu')}}
                     title="Crear un Menu" />
-                
             </View>
         </View>
 
         );
 }
-
-function MenuList(menus, props){
+*/
+function menus(props, menus){
     console.log(props);
     let menList = menus.map((menu, i) => {
         return(
             //<TouchableOpacity key={menu.id}>
                 <View key={i} style={{flex: 1, alignItems: 'center', borderBottomWidth: 5, borderBottomColor:'#cccccc'}}>
                     <TouchableOpacity onPress={ () => props.navigation.navigate('ShowMenu',menu)}>
-                        <Image source={menu.images[0]} style={{width: 400, height: 350, marginTop:10}}/>
+                        <Image source={menu.images[0]} style={{width: 380, height: 350, marginTop:10}}/>
                     </TouchableOpacity>
                     <View>
                         <Text selectable={true}  style={estilosMenu.titulo}>{menu.title}</Text>
@@ -137,7 +136,7 @@ function MenuList(menus, props){
         );
     });
     return(
-        <View>{menList}</View>
+        <ScrollView horizontal={true}>{menList}</ScrollView>
     );
 }
 

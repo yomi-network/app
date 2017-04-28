@@ -16,6 +16,7 @@ import api from '../utilities/api';
 import {StackNavigator} from 'react-navigation';
 import DB from './DB';
 import Picker from './ImagePicker';
+import Banner from './Banner';
 
 var DBEvents = require('react-native-db-models').DBEvents
 
@@ -39,6 +40,11 @@ class Recipes extends Component {
             recipeList: [],
         };
     }
+    static navigationOptions = {
+            title: 'Mis recetas',
+            headerRight: "algo",
+    };
+
     componentWillMount() {
         api.getRecipes().then((res) => {
             console.log(res);
@@ -47,59 +53,60 @@ class Recipes extends Component {
             })
         })
     }
-
     render(){
-        console.log("Recipes: ", this.state.recipeList);
-        if ( !this.state.recipeList.results ) {
-            return this.renderLoadingView();
+        console.log("Recetas: ", this.state.recipeList.results);
+        if ( this.state.recipeList.results === undefined || this.state.recipeList.results === null){
+            return this.renderLoadingView(this.props);
+        }else if(this.state.recipeList.results.length == 0){
+            return renderEmptyView(this.props)
         }else {
-            return recipes(this.props,this.state.recipeList.results)
+            return recipes(this.props, this.state.recipeList.results)
         }
 
     }
-    renderLoadingView() {
+    renderLoadingView(props) {
+        console.log("renderLoadingView ",props);
+        p = props;
         return (
-            <View>
-                <Text> Loading recipes... </Text>
+            <View style={estilosRecipe.container}>
+                <Text>Cargando ... </Text>
+                <Image style={{width: 48, height: 48}}
+                    source={require("../imagenes/egg48x48.png")} />
             </View>
         );
     }
-    renderRecipe(props){
+    renderEmptyView(props) {
+        console.log("renderEmptyView ",props);
+        p = props;
         return (
-            singleRecipe(props)
+            <View>
+                <Text> Todavia no tienes ningúna receta </Text>
+                <Button title="Crea una" onPress={
+                        (p) => {
+                            console.log(p)
+                            props.navigate('NewRecipe')}}/>
+            </View>
         );
     }
 }
 
 
-function recipes (props, recipeList) {
+/*/function recipes (recipeList) {
     let recipes = recipeList;
     console.log("recipes",recipes);
-    console.log(props);
     return (
-        <View style={{flex: 14}}>
-            <View>
-                <ScrollView title="Recetas">
-                    {RecipeList(recipes, props)}
-                </ScrollView>
-            </View>
+                    {RecipeList(recipes)}
 
-            <View style={{flex: 1}}>
-                <Button
-                    style={{position: 'absolute', marginTop: 50}}
-                    onPress={ () => props.navigation.navigate('NewRecipe',{id: 'rec5'})}
-                    title="Crear una receta" />
-            </View>
-        </View>
     );
-}
+}*/
 
-function RecipeList(recipes, props){
+function recipes(props,recipes){
+    console.log(recipes);
     console.log(props);
     let recList = recipes.map((recipe, i) => {
         return(
             //<TouchableOpacity key={recipe.id}>
-                <View key={i} style={{flex: 1, alignItems: 'center', borderBottomWidth: 5, borderBottomColor:'#cccccc'}}>
+                <View key={i}>
                     <TouchableOpacity onPress={ () => props.navigation.navigate('ShowRecipe',recipe)}>
                         <Image
                             source={{uri:recipe.images[0]}}
@@ -117,12 +124,13 @@ function RecipeList(recipes, props){
         );
     });
     return(
-        <View>{recList}</View>
+        <ScrollView horizontal={true}>{recList}</ScrollView>
     );
 }
 
-class NewRecipe extends Component{
+class NewRecipe extends Component {
     constructor(props){
+        console.log(props);
         super(props);
         this.state = {
             title: '',
@@ -147,67 +155,67 @@ class NewRecipe extends Component{
     render(){
         console.log(this.props);
         return(
-            <ScrollView style={{flex:0}}>
-            <View>
-                <Text>Información básica</Text>
-                <TextInput
-                    onChangeText={(text) => this.setState({title: text})}
-                    placeholder="Nombre de la receta"/>
-                <TextInput
-                    style={{height:50}}
-                    placeholder="Descripción"
-                    onChangeText={(text) => this.setState(
-                        {description: text})}/>
-                    <Picker changeImage={this.onChangeImage.bind(this)}/>
-            </View>
-            <View>
-                <Text>Porciones</Text>
-                <TextInput
-                    placeholder="¿Para cuantas personas alcanza?"
-                    onChangeText = {(text) => this.setState(
-                        {portions: text})}/>
-                <TextInput
-                    placeholder="Costo aproximado"
-                    onChangeText = {(text) => this.setState(
-                        {cost: text})}/>
-            </View>
-            <View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text>Ingredientes</Text>
-                    <Button
-                        style={{width:60}}
-                        title="Más"
-                        onPress={()=>{
-                            console.log("this state:", this.state);
-                            api.postRecipe(this.state)}} />
-                </View>
+            <View style={{flex: 1}}>
+                <View><Banner/></View>
+                <ScrollView >
+                    <View>
+                        <Text style={estilosRecipe.subtitulo}>Información básica</Text>
+                        <TextInput
+                            onChangeText={(text) => this.setState({title: text})}
+                            placeholder="Nombre de la receta"/>
+                        <TextInput
+                            style={{height:80}}
+                            placeholder="Descripción"
+                            onChangeText={(text) => this.setState(
+                                    {description: text})}/>
+                        <Picker changeImage={this.onChangeImage.bind(this)}/>
+                    </View>
+                    <View>
+                        <Text style={estilosRecipe.subtitulo}>Porciones</Text>
+                        <TextInput
+                            placeholder="¿Para cuantas personas alcanza?"
+                            onChangeText = {(text) => this.setState(
+                                {portions: text})}/>
+                        <TextInput
+                            placeholder="Costo aproximado"
+                            onChangeText = {(text) => this.setState(
+                                {cost: text})}/>
+                    </View>
+                    <View>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={estilosRecipe.subtitulo}>Ingredientes</Text>
+                            <Button
+                                title="Más"
+                                onPress={()=>{
+                                    console.log("this state:", this.state);
+                                    api.postRecipe(this.state)}} />
+                        </View>
 
-                <TextInput
-                    placeholder="Ingrediente 1"
-                    onChangeText = {(text) => this.setState(
-                        {ingredients: text})}/>
-                <TextInput
-                    placeholder="Ingrediente 2"
-                    onChangeText = {(text) => this.setState(
-                        {ingredients: text})}/>
+                        <TextInput
+                            placeholder="Ingrediente 1"
+                            onChangeText = {(text) => this.setState(
+                                {ingredients: text})}/>
+                        <TextInput
+                            placeholder="Ingrediente 2"
+                            onChangeText = {(text) => this.setState(
+                                {ingredients: text})}/>
+                    </View>
+                    <View>
+                        <Text style={estilosRecipe.subtitulo}>Modo de preparación</Text>
+                        <TextInput
+                            placeholder="Paso 1"
+                            onChangeText = {(text) => this.setState(
+                                {steps: text})}/>
+                        <TextInput
+                            placeholder="Paso 2"
+                            onChangeText = {(text) => this.setState(
+                                {steps: text})}/>
+                    </View>
+                </ScrollView>
+                <View>
+                    <MenuBar />
+                </View>
             </View>
-            <View>
-                <Text>Modo de preparación</Text>
-                <TextInput
-                    placeholder="Paso 1"
-                    onChangeText = {(text) => this.setState(
-                        {steps: text})}/>
-                <TextInput
-                    placeholder="Paso 2"
-                    onChangeText = {(text) => this.setState(
-                        {steps: text})}/>
-            </View>
-            <View>
-                <Button onPress={()=>{
-                    console.log("this state:", this.state);
-                    }} title="Guardar"/>
-            </View>
-        </ScrollView>
         );
     }
 }
@@ -225,33 +233,38 @@ const singleRecipe = (props) =>{
     console.log(recipe.images[0]);
     let ingredientList = ingredients.map((ingredient, i) => {
         return(
-            <Text key={i}>{ingredient}</Text>
+            <Text style={estilosRecipe.item} key={i}>{ingredient}</Text>
         );
     });
     let stepsList = steps.map((step, i) => {
         return(
-            <Text key={i}>{step}</Text>
+            <Text style={estilosRecipe.item} key={i}>{step}</Text>
         );
     });
     return(
+        <View style={{flex: 1}}>
+            <View style={{flex: 1}}><Banner/></View>
+            <View style={{flex: 5}}>
         <ScrollView>
             <View>
                 <Image source={{uri: recipe.images[0]}}
                     style={{width: 400, height: 350, marginTop:10}}/>
                 <Text style={estilosRecipe.titulo}>{recipe.title}</Text>
 
-                <Text style={estilosRecipe.titulo}>{recipe.description}</Text>
+                <Text style={estilosRecipe.description}>{recipe.description}</Text>
             </View>
             <View>
-                <Text>Ingredientes</Text>
+                <Text style={estilosRecipe.subtitulo}>Ingredientes</Text>
                 {ingredientList}
             </View>
             <View>
-                <Text>Preparacion</Text>
+                <Text style={estilosRecipe.subtitulo}>Preparacion</Text>
                 {stepsList}
             </View>
 
         </ScrollView>
+    </View>
+        </View>
     );
 }
 
@@ -284,64 +297,6 @@ class SingleRecipe extends Component {
 //    title: "Receta solita"+imprime(navigation.state.params.name),
 //});
 
-
-var recipeList = [
-    {
-    id: 'rec1',
-    name: 'Fresas con crema',
-    image: require('../imagenes/fresas.jpg'),
-    description: 'Fresas con crema es un postre en fresas que se sirven partidas en cuartos, bañadas con crema de leche batida',
-    owner: 'tlmsn',
-    ingredients: [
-        "1 kg de fresas",
-        "250 gr de crema",
-        "1 pizca de azucar",
-    ],
-    steps: [
-        "picar",
-        "sazonar",
-        "disfrutar",
-    ],
-    },
-    {
-    id: 'rec2',
-    name: 'Lasaña',
-    image: require('../imagenes/lasana.jpg'),
-    description: 'La lasaña es un tipo de pasta, que tiene pasta en láminas intercaladas con carne ',
-    owner: 'tlmsn',
-    ingredients: [
-        "1 kg de carne de res",
-        "1/2 kg de jitomate",
-        "1 cda de sal",
-        "1 diente de ajo",
-    ],
-    steps: [
-        "picar",
-        "rayar",
-        "sazonar",
-        "disfrutar",
-    ],
-    },
-    {
-    id: 'rec3',
-    name: 'Camarones al ajillo',
-    image: require('../imagenes/camaronesajillo.jpg'),
-    description: 'Fresas con crema es un postre en fresas que se sirven en cuartos, bañadas con crema de leche batida',
-    owner: 'epura',
-    ingredients: [
-        "1 kg de camarones",,
-        "1 1/2 cda de sal",
-        "10 dientes de ajo",
-    ],
-    steps: [
-        "picar",
-        "rayar",
-        "sazonar",
-        "disfrutar",
-    ],
-    }
-];
-
 var estilosRecipe = StyleSheet.create({
     titulo: {
         fontSize: 25,
@@ -349,13 +304,34 @@ var estilosRecipe = StyleSheet.create({
         width: 400,
         marginBottom: 10
     },
+    subtitulo: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: 400,
+        marginTop: 10
+    },
     descripcion: {
+        fontSize: 20,
         marginBottom: 20,
         width: 400
     },
     container: {
-        borderTopColor: 'red'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#fafafa",
     },
+    item: {
+        textAlign: 'justify',
+        height: 40,
+        width: -1,
+        marginLeft: 20,
+    },
+    round: {
+        borderRadius: 75,
+        width: 50,
+        height: 50
+    }
 });
 
 
