@@ -11,7 +11,20 @@ var api = {
             }
         }).then((res) => res.json());
     },
-
+    getProfile(profile, onComplete){
+      var url = `https://yomi.herokuapp.com/users/@${profile}/`
+      return fetch(url, {
+        headers: {
+          'Authorization': 'Basic '+Base64.btoa('admin_yomi:admin_yomi123456'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response =>
+        response.json()
+        .then(data => onComplete(data))
+        .then(res => {
+          console.log(res.status, res.data);
+        }));
+    },
     getMenus(){
         var url = "https://yomi.herokuapp.com/me/menus";
         return fetch(url,{

@@ -18,6 +18,7 @@ import * as Menus from './Menus';
 import ImagePicker from './ImagePicker';
 import Banner from './Banner';
 import TimeLine from './TimeLine';
+import {getProfile} from '../utilities/api';
 
 class MenuBar extends Component {
     constructor (props){
@@ -47,7 +48,10 @@ class MenuBar extends Component {
                     source={require('../imagenes/plus-circle-outline.png')}/>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress= {() => {navigation.navigate('Perfil')}}>
+                    onPress= {() => {
+                      getProfile('admin_yomi', (data) =>
+                      navigation.navigate('Perfil', {profile: data}));
+                    }}>
                     <Image style={styles.image}
                     source={require('../imagenes/account-circle.png')} />
                 </TouchableOpacity>
