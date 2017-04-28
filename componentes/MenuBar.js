@@ -21,20 +21,33 @@ import TimeLine from './TimeLine';
 
 class MenuBar extends Component {
     constructor (props){
-        super(props)
+        super(props);
+    }
+    static navigationOptions = {
+        title: 'Mis menus',
     }
     render(){
+        console.log("Props en menu bar", this.props.navigation);
+        console.log("Dentro de Menu bar", this.props.navigation);
+        var navigation =this.props.navigation;
+        var ruta = "ListRecipe";
+        console.log(ruta)
         return(
+
             <View style={styles.barra}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress= {() => {navigation.navigate('ListRecipe')}
+                    }>
                     <Image style={styles.image}
                     source={require('../imagenes/heart.png')}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress= {() => {navigation.navigate('ListRecipe')}}>
                     <Image style={styles.image}
                     source={require('../imagenes/plus-circle-outline.png')}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress= {() => {navigation.navigate('Perfil')}}>
                     <Image style={styles.image}
                     source={require('../imagenes/account-circle.png')} />
                 </TouchableOpacity>
