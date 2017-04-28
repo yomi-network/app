@@ -17,7 +17,7 @@ import {StackNavigator} from 'react-navigation';
 import DB from './DB';
 import Picker from './ImagePicker';
 import Banner from './Banner';
-
+import MenuBar from './MenuBar';
 var DBEvents = require('react-native-db-models').DBEvents
 
 
@@ -101,16 +101,17 @@ class Recipes extends Component {
 }*/
 
 function recipes(props,recipes){
-    console.log(recipes);
-    console.log(props);
+    console.log("Dentro de recipes",recipes);
+    console.log("Dentro de recipes",props);
+    console.log("Dentro de recipes-> Primera imagen de la segunda receta", recipes[1].images[0]);
     let recList = recipes.map((recipe, i) => {
         return(
             //<TouchableOpacity key={recipe.id}>
                 <View key={i}>
                     <TouchableOpacity onPress={ () => props.navigation.navigate('ShowRecipe',recipe)}>
-                        <Image
-                            source={{uri:recipe.images[0]}}
-                            style={{width: 400, height: 350, marginTop:10}}/>
+                    {recipe.images[0] === undefined ? <Image source={require('../imagenes/no_image.png')}
+                        style={{width: 400, height: 350, marginTop:10}}/> : <Image source={{uri: recipe.images[0]}}
+                            style={{width: 400, height: 350, marginTop:10}}/>}
                     </TouchableOpacity>
                     <View>
                         <Text selectable={true}  style={estilosRecipe.titulo}>{recipe.title}</Text>
@@ -130,8 +131,8 @@ function recipes(props,recipes){
 
 class NewRecipe extends Component {
     constructor(props){
-        console.log(props);
         super(props);
+        console.log("Props desde New recipe", props);
         this.state = {
             title: '',
             description: '',
@@ -153,7 +154,7 @@ class NewRecipe extends Component {
         console.log("Images", this.state.images);
     }
     render(){
-        console.log(this.props);
+        console.log("This props desde renderNewRecipe",this.props);
         return(
             <View style={{flex: 1}}>
                 <View><Banner/></View>
@@ -213,7 +214,7 @@ class NewRecipe extends Component {
                     </View>
                 </ScrollView>
                 <View>
-                    <MenuBar />
+                    <MenuBar navigation={this.props}/>
                 </View>
             </View>
         );
@@ -225,7 +226,7 @@ class NewRecipe extends Component {
 
 const singleRecipe = (props) =>{
     //console.log(navigation);
-    console.log(props.navigation);
+    console.log("En singleRecipe",props.navigation);
     const navigation = props.navigation;
     const recipe = navigation.state.params;
     const ingredients = recipe.ingredients;
@@ -247,8 +248,10 @@ const singleRecipe = (props) =>{
             <View style={{flex: 5}}>
         <ScrollView>
             <View>
-                <Image source={{uri: recipe.images[0]}}
-                    style={{width: 400, height: 350, marginTop:10}}/>
+                {recipe.images[0] === undefined ? <Image source={require('../imagenes/no_image.png')}
+                style={{width: 400, height: 350, marginTop:10}}/> : <Image source={{uri: recipe.images[0]}}
+                    style={{width: 400, height: 350, marginTop:10}}/>}
+
                 <Text style={estilosRecipe.titulo}>{recipe.title}</Text>
 
                 <Text style={estilosRecipe.description}>{recipe.description}</Text>
@@ -273,29 +276,13 @@ class SingleRecipe extends Component {
         title: "single recipe",
     };
     render(){
-        console.log(this.props);
+        console.log("En sigleRecipe class",this.props);
         return(
             singleRecipe(this.props)
         );
     }
 }
 
-/*singleRecipe.navigationOptions =  (props) => {
-    console.log("imprime algo");
-    const {navigation} = props;
-    const {state, setParams} = navigation;
-    const {params} = state;
-    console.log(params);
-    title: "algo";
-    }*/
-//singleRecipe.navigationOptions = {
-    //title: "Receta solita"+imprime(this.navigation),
-//    headerVisible: false,
-//}
-
-//singleRecipe.navigationOptions = ({navigation}) => ({
-//    title: "Receta solita"+imprime(navigation.state.params.name),
-//});
 
 var estilosRecipe = StyleSheet.create({
     titulo: {
