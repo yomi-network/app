@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Image } from 'react-native';
+import { Text, TextInput, View, Image, ScrollView } from 'react-native';
 import Banner from "./Banner";
+import MenuBar from './MenuBar';
 
 class User extends Component {
     constructor(props){
@@ -15,9 +16,9 @@ class User extends Component {
                 </View>
                 <ScrollView>
                     <Text>Informacion básica</Text>
-                    <View style={{flex:1, flexDirection: 'row', justifyContent:'space-between'}}>
+                    <View>
 
-                        <View style={{height: 100, width: 100}}><Image style={{height: 100, width: 100}} source={require("../imagenes/perfil.png")} />
+                        <View><Image source={require("../imagenes/perfil.png")} />
                         </View>
                         <View>
                             <Text>Nombre</Text>
