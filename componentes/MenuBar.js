@@ -7,17 +7,9 @@ import { Text,
     ScrollView,
     TouchableOpacity,
     Image} from 'react-native';
-import DrawerExample from './Header';
-import SearchBar from './SearchBar';
-import {StackNavigator} from 'react-navigation';
-import Terms from './Terminos';
-import Header from './Header';
-import * as RecipesApi from './RecipesFromApi';
-import User from './User';
-import * as Menus from './Menus';
-import ImagePicker from './ImagePicker';
-import Banner from './Banner';
-import TimeLine from './TimeLine';
+
+//import TimeLine from './TimeLine'; -- cuando es incluido causa error
+
 import {getProfile} from '../utilities/api';
 
 class MenuBar extends Component {
