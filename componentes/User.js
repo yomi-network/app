@@ -2,13 +2,30 @@ import React, { Component } from 'react';
 import { Text, TextInput, StyleSheet, View, Image, ScrollView } from 'react-native';
 import Banner from "./Banner";
 import MenuBar from './MenuBar';
+import {getRecipeByUrl} from '../utilities/api.js';
+import Recipes from './Recipes.js';
 
 class User extends Component {
     constructor(props){
         super(props)
+        this.state = {recipes: []}
     }
+
+    componentDidMount() {
+       var profile = this.props.navigation.state.params.profile;
+
+       const inner = ((recipe) => {
+         const new_recipes = [...this.state.recipes, recipe]
+         this.setState({recipes: new_recipes});
+       }).bind(this);
+
+       profile.recipes.map((url) => getRecipeByUrl(url, inner));
+    }
+
     render() {
-      var profile = this.props.navigation.state.params.profile;
+      const profile = this.props.navigation.state.params.profile;
+      const recipes = Recipes.RecipeList(this.state.recipes, this.props);
+      const total = this.state.recipes.length;
         return (
             <View style={{flex: 1, flexDirection: 'column',
             justifyContent: 'flex-end'}}>
@@ -25,7 +42,7 @@ class User extends Component {
 
                             <View style={profileStyle.supergroup}>
                               <View style={profileStyle.group}>
-                                <Text style={profileStyle.groupCounter}>0</Text>
+                                <Text style={profileStyle.groupCounter}>{total}</Text>
                                 <Text style={profileStyle.description}>Publicaciones</Text>
                               </View>
                               <View style={profileStyle.group}>
@@ -39,15 +56,9 @@ class User extends Component {
                             <Text style={profileStyle.email}>{profile.email}</Text>
                         </View>
                     </View>
-                    <View>
-                        <Text>Recetas que me han gustado</Text>
-
-                    </View>
-                    <View>
-                        <Text>Menus que me han gustado</Text>
-                    </View>
+                      {recipes}
                 </ScrollView>
-                <View><MenuBar /></View>
+                <View><MenuBar navigation={this.props.navigation} /></View>
             </View>
         );
     }
@@ -56,13 +67,13 @@ class User extends Component {
  var profileStyle = StyleSheet.create({
    background: {
      backgroundColor: '#FAFAFA',
-     paddingVertical: 30
+     paddingVertical: 20
    },
    picture: {
      marginLeft: 15,
-     width: 100,
-     height: 100,
-     borderRadius: 50,
+     width: 80,
+     height: 80,
+     borderRadius: 40,
      marginBottom: 10
 
    },
@@ -94,8 +105,7 @@ class User extends Component {
      textAlign: 'center'
    },
    head: {
-     alignItems: '
-     center',
+      alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
 

@@ -125,7 +125,7 @@ function recipes(props,recipes){
         );
     });
     return(
-        <ScrollView horizontal={true}>{recList}</ScrollView>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>{recList}</ScrollView>
     );
 }
 

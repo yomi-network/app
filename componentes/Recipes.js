@@ -27,15 +27,15 @@ class Recipes extends Component {
 
 function RecipeList(recipes, props){
     let recList = recipes.map((recipe) => {
+        const image = recipe.images.length >= 1 ? { uri: recipe.images[0] }: require('../imagenes/no-image-slide.png');
         return(
             //<TouchableOpacity key={recipe.id}>
                 <View key={recipe.id} style={{flex: 1, alignItems: 'center', borderBottomWidth: 5, borderBottomColor:'#cccccc'}}>
                     <TouchableOpacity onPress={ () => props.navigation.navigate('ShowRecipe',recipe)}>
-                        <Image source={recipe.image} style={{width: 400, height: 350, marginTop:10}}/>
+                        <Image source={image} style={{width: 400, height: 350, marginTop:10}}/>
                     </TouchableOpacity>
                     <View>
-                        <Text selectable={true}  style={estilosRecipe.titulo}>{recipe.name}</Text>
-
+                        <Text selectable={true}  style={estilosRecipe.titulo}>{recipe.title}</Text>
                         <Text selectable={true} style={estilosRecipe.descripcion}>{recipe.description}</Text>
 
                     </View>
@@ -186,4 +186,4 @@ var estilosRecipe = StyleSheet.create({
 });
 
 
-export default {Recipes, singleRecipe};
+export default {Recipes, singleRecipe, RecipeList};

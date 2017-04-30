@@ -20,10 +20,18 @@ var api = {
         }
       }).then(response =>
         response.json()
-        .then(data => onComplete(data))
-        .then(res => {
-          console.log(res.status, res.data);
-        }));
+        .then(data => {console.log(`profile: ${JSON.stringify(data)}`); onComplete(data); return data;}));
+    },
+    getRecipeByUrl(url, onComplete){
+      return fetch(url, {
+        headers: {
+          'Authorization': 'Basic '+Base64.btoa('admin_yomi:admin_yomi123456'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response =>
+        response.json()
+        .then(data => {console.log(`recipe: ${JSON.stringify(data)}`); onComplete(data);
+        return data;}));
     },
     getMenus(){
         var url = "https://yomi.herokuapp.com/me/menus";
