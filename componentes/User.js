@@ -25,6 +25,7 @@ class User extends Component {
     render() {
       const profile = this.props.navigation.state.params.profile;
       const recipes = Recipes.RecipeList(this.state.recipes, this.props);
+      const total = this.state.recipes.length;
         return (
             <View style={{flex: 1, flexDirection: 'column',
             justifyContent: 'flex-end'}}>
@@ -41,7 +42,7 @@ class User extends Component {
 
                             <View style={profileStyle.supergroup}>
                               <View style={profileStyle.group}>
-                                <Text style={profileStyle.groupCounter}>0</Text>
+                                <Text style={profileStyle.groupCounter}>{total}</Text>
                                 <Text style={profileStyle.description}>Publicaciones</Text>
                               </View>
                               <View style={profileStyle.group}>
@@ -57,7 +58,7 @@ class User extends Component {
                     </View>
                       {recipes}
                 </ScrollView>
-                <View><MenuBar /></View>
+                <View><MenuBar navigation={this.props.navigation} /></View>
             </View>
         );
     }
