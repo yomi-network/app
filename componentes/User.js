@@ -58,7 +58,7 @@ class User extends Component {
                     </View>
                       {recipes}
                 </ScrollView>
-                <View><MenuBar navigation={this.props.navigation} /></View>
+                <View><MenuBar navigation={this.props.navigation} active='Profile'/></View>
             </View>
         );
     }

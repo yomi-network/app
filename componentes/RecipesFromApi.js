@@ -214,7 +214,7 @@ class NewRecipe extends Component {
                     </View>
                 </ScrollView>
                 <View>
-                    <MenuBar navigation={this.props}/>
+                    <MenuBar navigation={this.props} active='Add'/>
                 </View>
             </View>
         );

@@ -6,50 +6,75 @@ import { Text,
     ListView,
     ScrollView,
     TouchableOpacity,
-    Image} from 'react-native';
+    Image } from 'react-native';
 
 //import TimeLine from './TimeLine'; -- cuando es incluido causa error
 
-import {getProfile} from '../utilities/api';
+import { getProfile } from '../utilities/api';
 
 class MenuBar extends Component {
-    constructor (props){
-        super(props);
-    }
-    static navigationOptions = {
-        title: 'Mis menus',
-    }
-    render(){
-        console.log("Props en menu bar", this.props.navigation);
-        console.log("Dentro de Menu bar", this.props.navigation);
-        var navigation =this.props.navigation;
-        var ruta = "ListRecipe";
-        console.log(ruta)
-        return(
+  constructor (props) {
+    super(props);
+  }
 
-            <View style={styles.barra}>
-                <TouchableOpacity
-                    onPress= {() => {navigation.navigate('ListRecipe')}
-                    }>
-                    <Image style={styles.image}
-                    source={require('../imagenes/heart.png')}/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress= {() => {navigation.navigate('ListRecipe')}}>
-                    <Image style={styles.image}
-                    source={require('../imagenes/plus-circle-outline.png')}/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress= {() => {
-                      getProfile('admin_yomi', (data) =>
-                      navigation.navigate('Perfil', {profile: data}));
-                    }}>
-                    <Image style={styles.image}
-                    source={require('../imagenes/account-circle.png')} />
-                </TouchableOpacity>
-            </View>
-        )
+  validate(next, f) {
+    var active = this.props.active !== undefined && this.props.active !== null ? this.props.active : 'Timeline';
+    return () => {
+      if (active !== next) f();
     }
+  }
+
+  render(){
+
+    var navigation = this.props.navigation;
+    var active = this.props.active !== undefined && this.props.active !== null ? this.props.active : 'Timeline';
+    var homeIcon = require('../imagenes/home-inactive.png');
+    var favoritesIcon = require('../imagenes/heart-inactive.png');
+    var addIcon = require('../imagenes/add-inactive.png');
+    var profileIcon = require('../imagenes/user-inactive.png');
+    var searchIcon = require('../imagenes/search-inactive.png');
+
+    if (active === 'Timeline') {
+      homeIcon = require('../imagenes/home.png');
+    }
+    if (active === 'Favorites') {
+      favoritesIcon = require('../imagenes/heart.png');
+    }
+    if (active === 'Add') {
+      addIcon = require('../imagenes/add.png');
+    }
+    if (active === 'Profile') {
+      profileIcon = require('../imagenes/user.png');
+    }
+    if (active === 'Search') {
+      searchIcon = require('../imagenes/search.png');
+    }
+
+    return (
+      <View style={styles.barra}>
+        <TouchableOpacity onPress={ this.validate('Timeline', () => { navigation.navigate('Index') }) }>
+          <Image style={styles.image} source={ homeIcon } />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress= { this.validate('Search', () => { navigation.navigate('ListRecipe') }) }>
+          <Image style={styles.image} source={ searchIcon }/>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress= { this.validate('Add', () => { navigation.navigate('ListRecipe') }) }>
+          <Image style={styles.image} source={ addIcon }/>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress= { this.validate('Favorites', () => {navigation.navigate('ListRecipe') }) }>
+          <Image style={styles.image} source={ favoritesIcon }/>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress= { this.validate('Profile', () => { getProfile('admin_yomi', (data) =>
+                navigation.navigate('Perfil', { profile: data })); }) }>
+            <Image style={styles.image} source={ profileIcon } />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
 export default MenuBar;
@@ -63,18 +88,18 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   image: {
-    width: 36,
-    height: 36,
+    width: 30,
+    height: 30,
     alignSelf: 'center',
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 15,
+    marginBottom: 15,
     resizeMode: 'contain',
   },
   barra: {
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      backgroundColor: "#ccc",
+      backgroundColor: "#FAFAFA",
       width: -1,
       marginTop: 10,
   }
