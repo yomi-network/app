@@ -336,4 +336,4 @@ var estilosMenu = StyleSheet.create({
 });
 
 
-export default {Menus, singlemenu,  Singlemenu, Newmenu};
+export default {Menus, singlemenu,  Singlemenu, Newmenu, menus};
