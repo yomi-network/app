@@ -52,7 +52,7 @@ export default class TimeLine extends Component {
 
                 </ScrollView>
                 <View>
-                    <MenuBar navigation={this.props.navigation}/>
+                    <MenuBar navigation={this.props.navigation} active='Timeline'/>
                 </View>
             </View>
         )
