@@ -13,10 +13,9 @@ import {
 const Banner = () => (
   <View style={styles.banner}>
     <Image
-      source={require('../imagenes/logo-yomi-positivo.png')}
+      source={require('../imagenes/logo-yomi.png')}
       style={styles.image}
     />
-<Text style={styles.title}>Yomi!!!</Text>
   </View>
 );
 
@@ -24,23 +23,21 @@ export default Banner;
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: 'rgb(255,170,77)',
+    backgroundColor: '#FAFAFA',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 0,
     marginTop: Platform.OS === 'ios' ? 20 : 0,
   },
   image: {
-    width: 36,
-    height: 36,
+    height: 42,
     resizeMode: 'contain',
     margin: 8,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '200',
-    color: '#fff',
+    height: 32,
+    resizeMode: 'contain',
     margin: 8,
-    marginLeft: 110,
   },
 });
